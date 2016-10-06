@@ -17,10 +17,10 @@ public class KNearest {
 			Double performance = 0.0;
 			for(int i = 0; i < 5; i++){
 				KNearest test = new KNearest("regression");
-				test.resetFile();
+				//test.resetFile();
 				test.fillFile(setPaths, i);
 				double tempPerformance = test.testPerformance(setPaths[i], k);
-				System.out.println("Testing Set " + (i+1) + " : " + tempPerformance);
+				//System.out.println("Testing Set " + (i+1) + " : " + tempPerformance);
 				performance+=tempPerformance;
 			}
 			System.out.println("K = " + k +" : "+100*(performance/5));
@@ -53,9 +53,9 @@ public class KNearest {
 					sum+=val;
 				}
 				sum/=results.size();
-				System.out.println(sum);
+				//System.out.println(sum);
 				classification = Integer.toString((int)Math.round(sum));
-				System.out.println(classification + " : " + currentClass);
+				//System.out.println(classification + " : " + currentClass);
 				if(classification.equalsIgnoreCase(currentClass)){
 					performance++;
 				}
