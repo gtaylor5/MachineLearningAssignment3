@@ -104,24 +104,6 @@ public class DataHandler {
 					line = swap(0,line);
 					fileAsArray.add(line);
 				}else if(dataSetName.equalsIgnoreCase("machine")){
-					Double value = Double.parseDouble(line[classIndex]);
-					if(value <= 20){
-						line[classIndex] = "1";
-					}else if(value <= 100){
-						line[classIndex] = "2";
-					}else if(value <= 200){
-						line[classIndex] = "3";
-					}else if(value <= 300){
-						line[classIndex] = "4";
-					}else if(value <= 400){
-						line[classIndex] = "5";
-					}else if(value <= 500){
-						line[classIndex] = "6";
-					}else if(value <= 600){
-						line[classIndex] = "7";
-					}else{
-						line[classIndex] = "8";
-					}
 					line = swap(classIndex, line);
 					String[] modified = new String[line.length-2];
 					for(int i = 2; i < line.length; i++){
