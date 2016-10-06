@@ -14,9 +14,9 @@ public class KNearest {
 			setPaths[i] = "Data/machine/Set"+(i+1)+".txt";
 		}
 		for(int k = 1; k < 11; k++){
-			KNearest test = new KNearest(" ");
 			Double performance = 0.0;
 			for(int i = 0; i < 5; i++){
+				KNearest test = new KNearest("regression");
 				test.resetFile();
 				test.fillFile(setPaths, i);
 				double tempPerformance = test.testPerformance(setPaths[i], k);
