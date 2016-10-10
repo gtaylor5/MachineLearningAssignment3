@@ -1,0 +1,98 @@
+Testing K-NN Regression: forest
+Cross Validation Performance (MSE) : 0.010460564358349715
+Cross Validation Performance (MSE) : 0.005862877212521341
+Cross Validation Performance (MSE) : 0.001554584676320557
+Cross Validation Performance (MSE) : 0.002529500382079744
+Cross Validation Performance (MSE) : 9.168031001319513E-4
+
+KMeans K-NN Regression: forest
+Cross Validation Performance (MSE): 0.009824129848272667
+Cross Validation Performance (MSE): 0.005654749945973744
+Cross Validation Performance (MSE): 2.487737848395604E-4
+Cross Validation Performance (MSE): 0.001577737858508123
+Cross Validation Performance (MSE): 2.3632320738983234E-4
+
+Testing K-Means RBFNN Regression: forest
+Cross Validation Performance : 98.5306771694246
+Cross Validation Performance : 98.16760077652815
+Cross Validation Performance : 99.3077927297855
+Cross Validation Performance : 98.61911885487376
+Cross Validation Performance : 99.47345077886679
+
+Testing K-NN Regression: machine
+Cross Validation Performance (MSE) : 0.0023985347545171874
+Cross Validation Performance (MSE) : 0.006662470226345377
+Cross Validation Performance (MSE) : 0.002267534215102653
+Cross Validation Performance (MSE) : 9.035435718128028E-4
+Cross Validation Performance (MSE) : 0.0011422896256812344
+
+KMeans K-NN Regression: machine
+Cross Validation Performance (MSE): 0.03213952637070447
+Cross Validation Performance (MSE): 0.03287874489886084
+Cross Validation Performance (MSE): 0.00955007795449747
+Cross Validation Performance (MSE): 0.00475344029680441
+Cross Validation Performance (MSE): 0.01836416391909245
+
+Testing K-Means RBFNN Regression: machine
+Cross Validation Performance : 93.76420915997701
+Cross Validation Performance : 92.95012945793724
+Cross Validation Performance : 95.80725686043732
+Cross Validation Performance : 95.797646862221
+Cross Validation Performance : 95.15166542115658
+
+Testing Condensed K-NN: segmentation
+Cross Validation Performance : 100.0
+Cross Validation Performance : 100.0
+Cross Validation Performance : 100.0
+Cross Validation Performance : 100.0
+Cross Validation Performance : 100.0
+
+Testing K-NN for Classification: segmentation
+Cross Validation Performance : 80.95238095238095
+Cross Validation Performance : 69.04761904761905
+Cross Validation Performance : 73.80952380952381
+Cross Validation Performance : 73.80952380952381
+Cross Validation Performance : 80.95238095238095
+
+KMeans K-NN classification: segmentation
+Cross Validation Performance : 80.95238095238095
+Cross Validation Performance : 61.904761904761905
+Cross Validation Performance : 61.904761904761905
+Cross Validation Performance : 76.19047619047619
+Cross Validation Performance : 76.19047619047619
+
+Testing RBFNN Classification: segmentation
+Cross Validation Performance : 85.71428571428571
+Cross Validation Performance : 90.47619047619048
+Cross Validation Performance : 85.71428571428571
+Cross Validation Performance : 95.23809523809523
+Cross Validation Performance : 78.57142857142857
+
+Testing Condensed K-NN: ecoli
+Cross Validation Performance : 96.66666666666667
+Cross Validation Performance : 100.0
+Cross Validation Performance : 94.33962264150944
+Cross Validation Performance : 95.83333333333334
+Cross Validation Performance : 98.21428571428571
+
+Testing K-NN for Classification: ecoli
+Cross Validation Performance : 90.625
+Cross Validation Performance : 81.25
+Cross Validation Performance : 78.125
+Cross Validation Performance : 75.0
+Cross Validation Performance : 80.28169014084507
+
+KMeans K-NN classification: ecoli
+Cross Validation Performance : 90.625
+Cross Validation Performance : 79.6875
+Cross Validation Performance : 85.9375
+Cross Validation Performance : 89.0625
+Cross Validation Performance : 84.50704225352112
+
+Testing RBFNN Classification: ecoli
+Cross Validation Performance : 85.9375
+Cross Validation Performance : 85.9375
+Cross Validation Performance : 79.6875
+Cross Validation Performance : 89.0625
+Cross Validation Performance : 56.33802816901409
+

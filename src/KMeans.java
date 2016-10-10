@@ -3,7 +3,6 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -51,6 +50,10 @@ public class KMeans {
 		fileScanner.close(); // close file scanner.
 	}
 	
+	/**************************************************************
+	 * Takes test data and classifies it based on relative location
+	 * to a cluster.
+	 *************************************************************/
 	
 	public String classify(Double[] xQ){
 		Iterator<Entry<String, Double[]>> it = centroids.entrySet().iterator();
@@ -64,7 +67,7 @@ public class KMeans {
 				classification = pair.getKey();
 			}
 		}
-		return classification;
+		return classification; // return classification of closest cluster.
 	}
 	
 	/**************************************************************************
@@ -73,7 +76,7 @@ public class KMeans {
 	**************************************************************************/
 	
 	public void generateCentroids(int indexToSkip) throws FileNotFoundException{
-		assignClusters(indexToSkip);
+		assignClusters(indexToSkip); //skips index to facilitate 5-fold validation.
 		setCentroids();
 	}
 	

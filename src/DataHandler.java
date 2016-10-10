@@ -23,6 +23,10 @@ import java.io.*;
  *
  ***********************************************/
 
+/**************************************************************************
+Turn csv data into usable data.
+**************************************************************************/
+
 public class DataHandler {
 	
 	String[] unProcessedFiles = {"ecoli.data.txt", "machine.data.txt", "segmentation.data.txt", "forestfires.csv"};
@@ -69,7 +73,7 @@ public class DataHandler {
 	 * Process Data Task
 	 *************************************************************/
 	public static void main(String[] args) {
-		DataHandler handler = new DataHandler("machine", "Data/machine.data.txt");
+		DataHandler handler = new DataHandler("forest", "Data/forestfires.csv");
 		handler.processData();
 	}
 	public void processData(){
@@ -92,7 +96,7 @@ public class DataHandler {
 		while(fileScanner.hasNextLine()){
 			if(dataSetName.equalsIgnoreCase("ecoli")){ // space separated file
 				String[] line = fileScanner.nextLine().split("\\s+");
-				String[] modified = new String[line.length-1];
+				String[] modified = new String[line.length-1]; //ignores word attributes.
 				this.classIndex = modified.length-1;
 				for(int i = 1; i < line.length; i++){
 					modified[i-1] = line[i];
@@ -104,49 +108,31 @@ public class DataHandler {
 					line = swap(0,line);
 					fileAsArray.add(line);
 				}else if(dataSetName.equalsIgnoreCase("machine")){
-					Double value = Double.parseDouble(line[classIndex]);
-					if(value <= 20){
-						line[classIndex] = "1";
-					}else if(value <= 100){
-						line[classIndex] = "2";
-					}else if(value <= 200){
-						line[classIndex] = "3";
-					}else if(value <= 300){
-						line[classIndex] = "4";
-					}else if(value <= 400){
-						line[classIndex] = "5";
-					}else if(value <= 500){
-						line[classIndex] = "6";
-					}else if(value <= 600){
-						line[classIndex] = "7";
-					}else{
-						line[classIndex] = "8";
-					}
-					line = swap(classIndex, line);
-					String[] modified = new String[line.length-2];
-					for(int i = 2; i < line.length; i++){
+					String[] modified = new String[line.length-3]; //ignores estimate and word attribtues.
+					for(int i = 2; i < line.length-1; i++){
 						modified[i-2] = line[i];
 					}
 					fileAsArray.add(modified);
 				}else{
-					line = encodeDate(line);
+					line = encodeDate(line); // encodes date to useable values.
 					fileAsArray.add(line);
 				}
 			}
 			if(j == 0){
 				lineLength = fileAsArray.get(0).length;
 				if(dataSetName.equalsIgnoreCase("forest")){
-					fileAsArray.remove(0);
+					fileAsArray.remove(0); // remove header.
 				}
 				j++;
 			}
 		}
 		if(dataSetName.equalsIgnoreCase("machine")){
-			classIndex = lineLength-1;
+			classIndex = lineLength-1;//changes class location after swapping.
+			standardizeFeatures(); // standardizes features to make sure they are weighted relatively equally.
+		}else if(dataSetName.equalsIgnoreCase("forest")){
+			standardizeFeatures();// standardizes features to make sure they are weighted relatively equally.
 		}
 		fileScanner.close();
-		fileAsArray.trimToSize();
-		//printArrayList(fileAsArray);
 	}
 	
 	/**************************************************************
@@ -169,7 +155,7 @@ public class DataHandler {
 				classCounts.put(fileAsArray.get(i)[classIndex], 1); // add class to map
 			}
 		}
-		printClassCounts(); // prints class counts.
+		//printClassCounts(); // prints class counts.
 	}
 	
 	/**************************************************************
@@ -179,46 +165,66 @@ public class DataHandler {
 	 *************************************************************/
 	
 	public void splitData() throws IOException{
+		int originalSize = fileAsArray.size();
 		for(int i = 0; i < 5; i++){ // number of files
-			ArrayList<String[]> temp = new ArrayList<String[]>(); // file as Array
-			Iterator<Map.Entry<String, Integer>> it = classCounts.entrySet().iterator();
-			while(it.hasNext()){
-				Map.Entry<String, Integer> pair = it.next();
-				int classCount = pair.getValue(); // overall class count
-				int j = 0;
-				int dataPointsNeeded = 0;
-				if(i == 4){ // fill last set with rest of data.
-					dataPointsNeeded = classCount/5 + classCount%5; // get left over values
-					while(j < fileAsArray.size()){
-						temp.add(fileAsArray.get(j));
-						j++;
+			if(this.dataSetName.equalsIgnoreCase("machine") || this.dataSetName.equalsIgnoreCase("forest")){
+				ArrayList<String[]> temp = new ArrayList<String[]>(); // file as Array
+				if(i == 4){
+					while(fileAsArray.size()!=0){
+						temp.add(fileAsArray.get(0));
+						fileAsArray.remove(0);
 					}
-					fileAsArray.removeAll(fileAsArray);
-					break;
+					writeToFile(i,temp);
+				}else{
+					while(temp.size() != originalSize/5){
+						int randomIndex = (int)(Math.random()*fileAsArray.size());
+						System.out.println(randomIndex);
+						temp.add(fileAsArray.get(randomIndex));
+						fileAsArray.remove(randomIndex);
+					}
+					writeToFile(i,temp);
 				}
-				if(classCount >= 5){
-					dataPointsNeeded = classCount/5;
-					while(j < fileAsArray.size() && dataPointsNeeded > 0){
-						if(pair.getKey().equalsIgnoreCase(fileAsArray.get(j)[classIndex])){
+			}else{
+				ArrayList<String[]> temp = new ArrayList<String[]>(); // file as Array
+				Iterator<Map.Entry<String, Integer>> it = classCounts.entrySet().iterator();
+				while(it.hasNext()){
+					Map.Entry<String, Integer> pair = it.next();
+					int classCount = pair.getValue(); // overall class count
+					int j = 0;
+					int dataPointsNeeded = 0;
+					if(i == 4){ // fill last set with rest of data.
+						dataPointsNeeded = classCount/5 + classCount%5; // get left over values
+						while(j < fileAsArray.size()){
 							temp.add(fileAsArray.get(j));
-							fileAsArray.remove(j);
-							dataPointsNeeded--;
+							j++;
 						}
-						j++;
+						fileAsArray.removeAll(fileAsArray);
+						break;
 					}
-				}else if(classCount < 5){//distribute as much as possible.
-					dataPointsNeeded = 1;
-					while(j < fileAsArray.size() && dataPointsNeeded > 0){
-						if(pair.getKey().equalsIgnoreCase(fileAsArray.get(j)[classIndex])){
-							temp.add(fileAsArray.get(j));
-							fileAsArray.remove(j);
-							dataPointsNeeded--;
+					if(classCount >= 5){
+						dataPointsNeeded = classCount/5;
+						while(j < fileAsArray.size() && dataPointsNeeded > 0){
+							if(pair.getKey().equalsIgnoreCase(fileAsArray.get(j)[classIndex])){
+								temp.add(fileAsArray.get(j));
+								fileAsArray.remove(j);
+								dataPointsNeeded--;
+							}
+							j++;
 						}
-						j++;
+					}else if(classCount < 5){//distribute as much as possible.
+						dataPointsNeeded = 1;
+						while(j < fileAsArray.size() && dataPointsNeeded > 0){
+							if(pair.getKey().equalsIgnoreCase(fileAsArray.get(j)[classIndex])){
+								temp.add(fileAsArray.get(j));
+								fileAsArray.remove(j);
+								dataPointsNeeded--;
+							}
+							j++;
+						}
 					}
 				}
+			writeToFile(i, temp); //write set to file. see below.
 			}
-		writeToFile(i, temp); //write set to file. see below.
 		}
 	}
 	
@@ -279,6 +285,10 @@ public class DataHandler {
 		System.out.println();
 	}
 	
+	/**************************************************************
+	 * Encodes date into usable values.
+	 *************************************************************/
+	
 	public String[] encodeDate(String[] array){
 		String[] mon = {"jan","feb", "mar", "apr", "may", "jun","jul","aug","sep","oct","nov", "dec"};
 		String [] day = {"mon", "tue","wed","thu","fri", "sat", "sun"};
@@ -293,6 +303,39 @@ public class DataHandler {
 			}
 		}
 		return array;
+	}
+	
+	/**************************************************************
+	 * Puts all values in a range between 0 and 1.
+	 *************************************************************/
+	
+	public void standardizeFeatures(){
+		Double[] maxes = new Double[fileAsArray.get(0).length];
+		Double[] mins = new Double[fileAsArray.get(0).length];
+		
+		for(int i = 0; i < fileAsArray.get(0).length; i++){
+			Double max = Double.MIN_VALUE;
+			Double min = Double.MAX_VALUE;
+			for(String[] array : fileAsArray){
+				if(Double.parseDouble(array[i]) > max){
+					max = Double.parseDouble(array[i]);
+				}
+				if(Double.parseDouble(array[i]) < min){
+					min = Double.parseDouble(array[i]);
+				}
+			}
+			maxes[i] = max;
+			mins[i] = min;
+		}
+		for(String[] array : fileAsArray){
+			for(int i = 0; i < array.length; i++){
+				Double val = Double.parseDouble(array[i]);
+				Double num = (val - mins[i]);
+				Double denom = (maxes[i]-mins[i]);
+				val = (num/denom);
+				array[i] = Double.toString(val);
+			}
+		}
 	}
 	
 	/**************************************************************
