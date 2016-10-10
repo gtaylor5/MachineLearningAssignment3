@@ -108,8 +108,14 @@ public class DataHandler {
 					line = swap(0,line);
 					fileAsArray.add(line);
 				}else if(dataSetName.equalsIgnoreCase("machine")){
+<<<<<<< HEAD
 					String[] modified = new String[line.length-3]; //ignores estimate and word attribtues.
 					for(int i = 2; i < line.length-1; i++){
+=======
+					line = swap(classIndex, line);
+					String[] modified = new String[line.length-2];
+					for(int i = 2; i < line.length; i++){
+>>>>>>> origin/master
 						modified[i-2] = line[i];
 					}
 					fileAsArray.add(modified);
